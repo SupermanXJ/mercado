@@ -1,0 +1,31 @@
+# 404 Links
+
+- https://global-selling.mercadolibre.com/devsite/addresses
+- https://global-selling.mercadolibre.com/devsite/official-stores-global-selling
+- https://global-selling.mercadolibre.com/devsite/register-your-application-global-selling
+- https://global-selling.mercadolibre.com/devsite/application-manager
+- https://global-selling.mercadolibre.com/devsite/what-is-post-sale-messages
+- https://global-selling.mercadolibre.com/devsite/manage-sales-global-selling
+- https://global-selling.mercadolibre.com/devsite/marketplace-items
+- https://global-selling.mercadolibre.com/devsite/recommendations-for-photo-quality
+- https://global-selling.mercadolibre.com/devsite/automated-co-participation-and-competitive-pricing-campaign
+- https://global-selling.mercadolibre.com/devsite/working-with-claims-global-selling
+- https://global-selling.mercadolibre.com/devsite/pricing-manager
+- https://global-selling.mercadolibre.com/devsite/set-categories-for-your-products-global-selling
+- https://global-selling.mercadolibre.com/devsite/dispatch-information
+- https://global-selling.mercadolibre.com/devsite/complained-listings
+- https://global-selling.mercadolibre.com/devsite/what-is-the-brand-protection-program
+- https://global-selling.mercadolibre.com/devsite/unhealthy-stock-campaign
+- https://global-selling.mercadolibre.com/devsite/deals-gs
+- https://global-selling.mercadolibre.com/devsite/pre-negotiated-discount-per-item-gs
+- https://global-selling.mercadolibre.com/devsite/official-storesglobal-selling
+- https://global-selling.mercadolibre.com/devsite/lightning-deal-gs
+- https://global-selling.mercadolibre.com/devsite/Lightning-Deal-gs
+- https://global-selling.mercadolibre.com/devsite/regular-deal-gs
+- https://global-selling.mercadolibre.com/devsite/sales-events-gs
+- https://global-selling.mercadolibre.com/devsite/global-items
+- https://global-selling.mercadolibre.com/devsite/lightning-deal
+- https://global-selling.mercadolibre.com/devsite/find-out-how-the-sellers-are-in-relation-to-the-loading-of-attributes-gs
+- https://global-selling.mercadolibre.com/devsite/categories-listings-global-selling
+- https://global-selling.mercadolibre.com/devsite/attributes
+- https://global-selling.mercadolibre.com/devsite/list-products-global-selling
