@@ -1,5 +1,10 @@
 # 美客多 Global Selling 文档要点问答
 
+## 开发文档(跨境): https://global-selling.mercadolibre.com/devsite/introduction-globalselling
+- listing API有两套，一套与eBay一样，多属性为一个listing，一套类似亚马逊，可以单独设置各个子SKU
+- 调研确认listing使用哪套API？
+- 验证：老版API 和 新版API 是否与用户账号相关
+
 ## 商品有哪些大的模块？
 - 发布/刊登（Global Listing，创建 global item 与站点 item）
 - 分类（Category Predictor、Category Tree）
@@ -16,17 +21,21 @@
 ## 是否支持多站点？并列举出所有站点。
 - 支持多站点：Global Listing 支持同时发布到多个 marketplace（示例明确包含 MLM/MLB/MLC/MCO）。
 - 站点列表（/sites 接口文档示例中列出）：
-  - MLU, MHN, MPT, MRD, MLA, MLM, MCR, MBO, MPE, MSV, MPY, MNI, MLV, MCU, MEC, MLC, MGT, MCO, MLB, MPA
+  - 墨西哥、巴西、智利、哥伦比亚、阿根廷
+  <!-- - AI回答错误：MLU, MHN, MPT, MRD, MLA, MLM, MCR, MBO, MPE, MSV, MPY, MNI, MLV, MCU, MEC, MLC, MGT, MCO, MLB, MPA -->
 
 ## 支持哪些货币？
-- /sites 接口示例的默认货币：UYU, HNL, EUR, DOP, ARS, MXN, CRC, BOB, PEN, USD, PYG, NIO, VES, CUP, CLP, GTQ, COP, BRL, PAB
+<!-- - /sites 接口示例的默认货币：UYU, HNL, EUR, DOP, ARS, MXN, CRC, BOB, PEN, USD, PYG, NIO, VES, CUP, CLP, GTQ, COP, BRL, PAB -->
 - Global Selling 刊登要求：global item 价格币种固定为 USD。
+- 分发各自站点有平台自己算，我们统一USD
+- 验证：指定分发站点的价格，默认货币USD，验证平台是否会自动转换？
 
 ## 是否支持单属性和多属性发布商品？
 - 支持。无 variations 即单属性；有 variations 即多属性。
 - 变体是否可用取决于分类属性标签 allow_variations；若分类允许变体但没有 required 变体属性，可不创建变体。
+- 验证：分类是否仅支持单属性或仅支持多属性
 
-## 库存逻辑是什么？
+## 验证：库存逻辑是什么？
 - Global item 的 available_quantity 会同步到所有站点（未单独覆盖时）。
 - 变体商品按 variation 的 available_quantity 管理库存。
 - 库存更新为 0 会触发 status 变为 paused（out_of_stock 子状态）；库存恢复 > 0 会回到 active。
@@ -34,16 +43,30 @@
 
 ## 平台分类逻辑是什么？
 - 分类按站点区分：通过 /sites/{site_id}/categories 获取站点分类树。
+  - 目前只做全球站点
 - 发布前用 Category Predictor 预测分类与所需属性。
+  - 根据标题等信息获取推荐的分类
 - category_id 为必填字段，只接受平台预置的分类 ID。
+
+## 验证：刊登时是否支持传多个分发站点的描述？
 
 ## 商品属性与什么有关？是怎样的关系？
 - 属性与分类强相关：/categories/{category_id}/attributes 返回该分类的属性与标签（required/new_required/conditional_required 等）。
+  - 标签（required/new_required/conditional_required 等）整理转换成DC能通用识别 - 乐乐
 - 属性可在 item 层或 variation 层填写，且可修改/删除/新增。
+- 验证: variation 层属性填写 
+- 不支持自定义
+- 验证：多验证前端尽量不管平台属性及属性值等与平台相关的ID
+
+## 产品属性能否当变体属性？
+## 产品属性值是否会决定变体属性？
 
 ## 多属性商品与什么有关？是怎样的关系？
 - 多属性与分类的 allow_variations 及 variation_attribute 标签相关。
 - 变体必须在 attribute_combinations 中填写可变体属性；变体自身特性放在 variations[].attributes。
+
+## 是否支持自定义属性?
+- 验证：支持：可在 variations 的 attribute_combinations 中使用 API 未定义的自定义属性。
 
 ## 哪些模块与分类有关？
 - Category Predictor（预测分类）
@@ -56,13 +79,14 @@
 - 文档中仅说明 SKU 使用 SELLER_SKU 属性存储，且可在变体级别填写。
 - 未明确给出父/子 SKU 的定义或绑定关系；实际关系体现为同一 global item 下的多个 variation 各自有 SELLER_SKU。
 
-## 是否支持单属性修改为多属性？多属性修改为单属性？
+## 验证：是否支持单属性修改为多属性？多属性修改为单属性？
 - 支持从单属性变为多属性：可通过 PUT /global/items/{item_id} 添加 variations。
 - 多属性删除变体：可在 PUT 中不传某个 variation id 或使用 DELETE /marketplace/items/{item_id}/variations/{variation_id}。
 - 文档未明确说明能否从多属性完全转为无 variations 的单属性模式。
 
 ## 支持修改哪些属性内容？修改的接口是单个还是多个？列举出修改接口。
 - 可修改/新增/删除属性、标题、状态、库存、价格、变体、图片、描述等（部分字段受是否有销量限制）。
+  - 调研是否能知道listing是否有销售
 - 修改接口是多个，主要包括：
   - PUT https://api.mercadolibre.com/global/items/{ITEM_ID}（更新全局商品、变体、库存、价格、状态等）
   - PUT https://api.mercadolibre.com/global/items/{MARKETPLACE_ITEM_ID}（更新站点商品）
@@ -76,10 +100,7 @@
 - 文档还描述了状态含义：Active、Paused、Inactive、Under review
 
 ## 商品是否支持彻底删除？
-- 文档中仅显示 marketplace item 可能进入 deleted 状态，但未提供删除整条商品的专用接口。
-
-## 是否支持自定义属性?
-- 支持：可在 variations 的 attribute_combinations 中使用 API 未定义的自定义属性。
+- 验证：文档中仅显示 marketplace item 可能进入 deleted 状态，但未提供删除整条商品的专用接口。
 
 ## 通过分类是否可以拉取到属性的填写规则?
 - 可以：/categories/{category_id}/attributes 返回属性及 required/new_required/conditional_required 等标签。
@@ -181,13 +202,14 @@
   - 自动更新：当发生销售时，库存会扣减并反映到 Global Selling（文档说明库存变动会同步反映）。  
   - 库存为 0 会将状态改为 `paused` 且带 `out_of_stock` 子状态；库存恢复 > 0 会回到 `active`。  
   - Fulfillment 场景使用 `inventory_id` 追踪库存，变体有各自的 `inventory_id`。
+  - 验证：单独一个子SKU变体库存变为0会是什么情况？
 
 - CBT 库存与各站点库存有什么关系和联系？  
-  - 文档描述：global item 的库存会同步到所有站点；若站点没有单独覆盖，则站点库存与 CBT 保持一致。  
+  - 验证：文档描述：global item 的库存会同步到所有站点；若站点没有单独覆盖，则站点库存与 CBT 保持一致。  
   - 文档未提到“等分分摊”，按描述应为各站点与 CBT 库存数相同（同一个库存数）。  
-  - 变体商品在各站点同样使用变体级库存；库存更新在 Global Selling 侧统一反映。
+  - 验证：变体商品在各站点同样使用变体级库存；库存更新在 Global Selling 侧统一反映。
 
-## 目录相关逻辑
+## 目录相关逻辑 - 二期
 
 - 目录资格：通过 `catalog_listing_eligible` 标签识别可进入目录的商品；也可用搜索 `catalog_listing=true/false` 过滤目录/非目录商品。  
 - 目录刊登（Opt-in）：从已有 listing 创建目录商品，需先找到匹配的 `catalog_product_id`，再 POST `/items/catalog_listings`；若原商品有变体，需要按变体分别创建（每个 variation_id 一条）。  
@@ -203,7 +225,9 @@
 - 尺码表类型：`SPECIFIC`（卖家自定义）与 `BRAND`（品牌尺码表）。  
 - 创建尺码表需指定 `domain_id`、`gender`、主尺码字段等，并按规格表定义结构提交行（rows）。  
 - 通过 `SIZE_GRID_ID` + `SIZE_GRID_ROW_ID` 关联到商品；变体可关联到不同 row。  
+  - 验证：是否可以自动识别子SKU与row对应
 - 尺码表会被校验结构与属性一致性；已关联到商品的尺码表不能直接删除，需先解除关联。
+- 一个平台账号可以创建多个尺码表
 
 - 如何获取可用 size chart domain？  
   - GET `https://api.mercadolibre.com/catalog/charts/CBT/configurations/active_domains` 返回可用的 `domain_id` 列表（示例为 CBT 站点）。
@@ -219,9 +243,9 @@
 ## 描述与图片相关的逻辑和接口
 
 ### 描述逻辑
-- 描述为纯文本（plain_text），不允许 HTML/特殊字符。
+- 验证：描述为纯文本（plain_text），不允许 HTML/特殊字符。
 - 新建 global item 后可用 POST 创建描述；已有描述需用 PUT 替换。
-- 描述会自动翻译到站点语言；新站点生成后需在 2 天内更新描述。
+- 验证：描述会自动翻译到站点语言；新站点生成后需在 2 天内更新描述。
 
 ### 描述接口
 - GET `https://api.mercadolibre.com/marketplace/items/{ITEM_ID}/description?site_id={SITE_ID}&logistic_type={LOGISTIC_TYPE}`
@@ -249,3 +273,9 @@
   - 更新商品图片或变体图片（`pictures` / `variations[].picture_ids`）。
 - GET `https://api.mercadolibre.com/pictures/{PICTURE_ID}/errors`
   - 查询图片处理错误。
+
+### 产品类型逻辑
+
+### 包裹尺寸和重量 逻辑是什么？
+
+### 质保相关逻辑
